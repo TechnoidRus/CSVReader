@@ -29,7 +29,7 @@ public class CsvParser extends Thread {
     }
   }
 
-  //Парсим строки и добавляем их в мапу для удобства, ключ заголовок, значение сет из строк соответствующих заоголовку.
+  //Парсим строки и добавляем их в мапу для удобства, ключ заголовок, значение сет из строк соответствующих заголовку.
   private synchronized void parsing() {
     String[] keys = strings.get(0).split(";");
 
@@ -49,7 +49,12 @@ public class CsvParser extends Thread {
   }
 
   //Пишем набор файлов с названиями соответствующими заголовкам и содержимым - уникальными в рамках всей задачи значениями.
-  public static void writeFiles() {
+  public static void writeFiles() throws InterruptedException {
+
+    //проверка завершились ли потоки обработки файлов
+    while (Thread.activeCount() != 2) {
+      Thread.sleep(1000);
+    }
     for (String s : result.keySet()) {
       try (FileWriter fw = new FileWriter(s + ".csv", true)) {
         fw.write(s + ":" + System.lineSeparator());
@@ -57,7 +62,7 @@ public class CsvParser extends Thread {
           fw.write(val + ";");
         }
       } catch (IOException e) {
-        System.out.println("не удалось создать файл");
+        System.out.println("Не удалось создать файл");
       }
     }
   }

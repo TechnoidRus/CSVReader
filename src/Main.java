@@ -6,10 +6,6 @@ public class Main {
     for (String s : args) {
       new CsvParser(s).start();
     }
-
-    //Ждем чтобы нити выполнили работу, для большого количества файлов цифру можно изменить.
-    Thread.sleep(1000);
-
     //Пишем данные в файл, файлы сохраняются в корень проекта
     CsvParser.writeFiles();
 
